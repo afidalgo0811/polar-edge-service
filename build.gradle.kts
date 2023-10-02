@@ -23,6 +23,8 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-gateway")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+  implementation(
+      "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
 }
 
 dependencyManagement {
