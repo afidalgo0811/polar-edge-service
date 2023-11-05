@@ -7,16 +7,29 @@ server:
   shutdown: graceful
 # ==================== Spring =========================
 spring:
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            clientId: polar-edge-service
+            clientSecret: polar-keycloak-secret
+            scope:
+              - openid
+        provider:
+          keycloak:
+            issuerUri: http://localhost:8080/realms/PolarBookshop
   session:
     store-type: redis
     timeout: 10m
     redis:
       namespace: polar:edge
-  redis:
-    connect-timeout: 2s
-    host: localhost
-    port: 6379
-    timeout: 1s
   cloud:
     config:
       uri: "http://localhost:8888"
@@ -73,8 +86,12 @@ spring:
             - name: CircuitBreaker
               args:
                 name: orderCircuitBreaker
+        - id: spa-route
+          uri: ${SPA_URL:http://localhost:9004}
+          predicates:
+            - Path=/,/*.css,/*.js,/favicon.ico
   application:
-    name: edge-service
+    name: polar-edge-service
   lifecycle:
     timeout-per-shutdown-phase: 15s
   config:
@@ -97,9 +114,3 @@ resilience4j:
 logging:
   level:
     io.github.resilience4j: DEBUG
-# ========================= others =======================
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
