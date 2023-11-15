@@ -1,6 +1,7 @@
 package com.afidalgo.polaredgeservice.config
 
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
@@ -20,7 +21,14 @@ class SecurityConfig {
       clientRegistrationRepository: ReactiveClientRegistrationRepository
   ): SecurityWebFilterChain =
       http
-          .authorizeExchange { it.anyExchange().authenticated() }
+          .authorizeExchange {
+            it.pathMatchers("/", "/*.css", "/*.js", "/favicon.ico")
+                .permitAll()
+                .pathMatchers(HttpMethod.GET, "/books/**")
+                .permitAll()
+                .anyExchange()
+                .authenticated()
+          }
           .exceptionHandling {
             it.authenticationEntryPoint(HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED))
           }
