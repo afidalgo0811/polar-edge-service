@@ -2,7 +2,8 @@ package com.afidalgo.polaredgeservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.GenericContainer
@@ -13,6 +14,7 @@ import org.testcontainers.utility.DockerImageName
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class PolarEdgeServiceApplicationTests {
+  @MockBean lateinit var clientRegistrationRepository: ReactiveClientRegistrationRepository
 
   companion object {
     private const val REDIS_PORT = 6379

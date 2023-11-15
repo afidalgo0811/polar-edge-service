@@ -22,17 +22,41 @@ extra["springCloudVersion"] = "2022.0.4"
 
 extra["testcontainersVersion"] = "1.18.0"
 
+val spaceUsername: String? by project
+val spacePassword: String? by project
+val userName: String? = System.getenv("SPACE_USERNAME")
+val passWord: String? = System.getenv("SPACE_PASSWORD")
+val usr = userName ?: spaceUsername // checks env first
+val psw = passWord ?: spacePassword // checks env first
+val urlArtifactRepository = ext["jetbrains.url"].toString()
+val sharedLibraryVersion = ext["shared.library.version"].toString()
+
+repositories {
+  mavenCentral()
+  maven {
+    url = uri(urlArtifactRepository)
+    credentials {
+      username = usr
+      password = psw
+    }
+  }
+}
+
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-gateway")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
   implementation(
       "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
   implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
   implementation("org.springframework.session:spring-session-data-redis")
   implementation("org.springframework.cloud:spring-cloud-starter-config")
   implementation("org.springframework.retry:spring-retry")
+  implementation("org.springframework.boot:spring-boot-starter-security")
+  implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+  testImplementation("org.springframework.boot:spring-boot-starter-test")
+  testImplementation("org.springframework.security:spring-security-test")
   testImplementation("org.testcontainers:junit-jupiter")
+  implementation("com.afidalgo:shared-library:$sharedLibraryVersion")
 }
 
 dependencyManagement {
