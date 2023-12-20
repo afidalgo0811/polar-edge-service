@@ -32,6 +32,22 @@ class SecurityConfigTests {
   }
 
   @Test
+  fun `when logout not authenticate and CsrfToken then 403`() {
+    webClient.post().uri("/logout").exchange().expectStatus().isForbidden
+  }
+
+  @Test
+  fun `when logout authenticate and no CsrfToken then 403`() {
+    webClient
+        .mutateWith(SecurityMockServerConfigurers.mockOidcLogin())
+        .post()
+        .uri("/logout")
+        .exchange()
+        .expectStatus()
+        .isForbidden
+  }
+
+  @Test
   fun `when logout authenticate and CsrfToken then 302`() {
     `when`(clientRegistrationRepository.findByRegistrationId("test"))
         .thenReturn(Mono.just(testClientRegistration()))
