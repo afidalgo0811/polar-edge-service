@@ -5,7 +5,6 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import shared.library.order.User
 
 @RestController
 class UserController {
@@ -17,5 +16,5 @@ class UserController {
               oidcUser.preferredUsername,
               oidcUser.givenName,
               oidcUser.familyName,
-              mutableListOf("Employee", "customer")))
+              mutableListOf("employee", "customer")))
 }
