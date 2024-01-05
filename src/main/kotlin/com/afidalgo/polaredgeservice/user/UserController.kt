@@ -16,5 +16,6 @@ class UserController {
               oidcUser.preferredUsername,
               oidcUser.givenName,
               oidcUser.familyName,
-              mutableListOf("employee", "customer")))
+              oidcUser.getClaimAsStringList(
+                  "roles"))) // gets the "roles" claim and extracts it as a list of strings
 }

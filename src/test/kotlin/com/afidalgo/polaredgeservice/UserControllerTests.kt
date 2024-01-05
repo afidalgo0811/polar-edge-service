@@ -48,6 +48,7 @@ class UserControllerTests {
       it.claim(StandardClaimNames.PREFERRED_USERNAME, expectedUser.userName)
           .claim(StandardClaimNames.GIVEN_NAME, expectedUser.firstName)
           .claim(StandardClaimNames.FAMILY_NAME, expectedUser.lastName)
+          .claim("roles", expectedUser.roles)
     }
   }
 }

@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository
+import org.springframework.security.oauth2.client.web.server.WebSessionServerOAuth2AuthorizedClientRepository
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler
@@ -68,5 +70,11 @@ class SecurityConfig {
       }
       chain.filter(exchange)
     }
+  }
+
+  // Defines a repository to store Access Tokens in the web session
+  @Bean
+  fun authorizedClientRepository(): ServerOAuth2AuthorizedClientRepository {
+    return WebSessionServerOAuth2AuthorizedClientRepository()
   }
 }
