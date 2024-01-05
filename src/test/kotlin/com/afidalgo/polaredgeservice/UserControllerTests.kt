@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper
 
 @WebFluxTest(UserController::class)
 @Import(SecurityConfig::class)
@@ -20,7 +19,6 @@ class UserControllerTests {
 
   @Autowired lateinit var webClient: WebTestClient
   @MockBean lateinit var clientRegistrationRepository: ReactiveClientRegistrationRepository
-  val objectMapper: ObjectMapper = ObjectMapper()
 
   @Test
   fun whenNotAuthenticatedThen401() {
