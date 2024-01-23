@@ -21,7 +21,8 @@ spring:
             clientId: polar-edge-service
             clientSecret: polar-keycloak-secret
             scope:
-              - openid, roles
+              - openid
+              - roles
         provider:
           keycloak:
             issuerUri: http://localhost:8080/realms/PolarBookshop

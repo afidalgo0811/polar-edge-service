@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler
@@ -42,7 +41,7 @@ class SecurityConfig {
         .exceptionHandling {
           it.authenticationEntryPoint(HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED))
         }
-        .oauth2Login(Customizer.withDefaults())
+        .oauth2Login {}
         .logout { it.logoutSuccessHandler(oidcLogoutSuccessHandler(clientRegistrationRepository)) }
         .csrf { it.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()) }
         .build()
@@ -64,7 +63,7 @@ class SecurityConfig {
         Mono.defer {
           val csrfToken: Mono<CsrfToken>? =
               exchange.getAttribute<Mono<CsrfToken>>(CsrfToken::class.java.getName())
-          exchange.mutate().request { it.header("X-XSRF-TOKEN", csrfToken.toString()) }.build()
+          exchange.mutate().request { it.header("XSRF-TOKEN", csrfToken.toString()) }.build()
           csrfToken?.then() ?: Mono.empty()
         }
       }
