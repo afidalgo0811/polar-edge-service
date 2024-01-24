@@ -22,6 +22,7 @@ spring:
             clientSecret: polar-keycloak-secret
             scope:
               - openid
+              - roles
         provider:
           keycloak:
             issuerUri: http://localhost:8080/realms/PolarBookshop
@@ -44,6 +45,7 @@ spring:
     gateway:
       default-filters:
         - SaveSession
+        - TokenRelay
         - name: RequestRateLimiter
           args:
             redis-rate-limiter:
