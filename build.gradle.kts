@@ -22,6 +22,8 @@ extra["springCloudVersion"] = "2022.0.4"
 
 extra["testcontainersVersion"] = "1.18.0"
 
+extra["otelVersion"] = "1.17.0"
+
 val spaceUsername: String? by project
 val spacePassword: String? by project
 val userName: String? = System.getenv("SPACE_USERNAME")
@@ -45,6 +47,7 @@ repositories {
 dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+  implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation(
       "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j")
   implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
@@ -53,10 +56,12 @@ dependencies {
   implementation("org.springframework.retry:spring-retry")
   implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+  implementation("com.afidalgo:shared-library:$sharedLibraryVersion")
+  runtimeOnly("io.github.resilience4j:resilience4j-micrometer")
+  runtimeOnly("io.opentelemetry.javaagent:opentelemetry-javaagent:${property("otelVersion")}")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.security:spring-security-test")
   testImplementation("org.testcontainers:junit-jupiter")
-  implementation("com.afidalgo:shared-library:$sharedLibraryVersion")
 }
 
 dependencyManagement {
@@ -98,3 +103,5 @@ tasks.named<BootBuildImage>("bootBuildImage") {
     }
   }
 }
+
+springBoot { buildInfo() }

@@ -25,7 +25,7 @@ spring:
               - roles
         provider:
           keycloak:
-            issuerUri: http://localhost:8080/realms/PolarBookshop
+            issuerUri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI:http://localhost:8080/realms/PolarBookshop}
   session:
     store-type: redis
     timeout: 10m
@@ -98,6 +98,43 @@ spring:
     timeout-per-shutdown-phase: 15s
   config:
     import: "optional:configserver:"
+info:
+  system Polar Bookshop
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - loggers
+          - prometheus
+          - info
+          - heapdump
+          - env
+          - gateway
+          - mappings
+          - configprops
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    os:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include:
+            - readinessState
+            - redis
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 # =================== resilience4j ==========================
 resilience4j:
@@ -114,6 +151,9 @@ resilience4j:
         timeoutDuration: 5s
 # ========================= logging =======================
 logging:
+  group:
+    circuitbreaker: io.github.resilience4j, org.springframework.cloud.circuitbreaker
   level:
-    io.github.resilience4j: DEBUG
-    root: info
+    circuitbreaker: info
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
